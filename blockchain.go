@@ -1,5 +1,10 @@
 package main
 
+// 创建区块链，使用Block数组模拟
+type BlockChain struct {
+	Blocks []*Block
+}
+
 // 实现创建区块链的方法
 func NewBlockChain() *BlockChain {
 	// 在创建的时候添加一个区块：创世块

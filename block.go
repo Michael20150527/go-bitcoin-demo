@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"time"
 )
@@ -39,20 +40,27 @@ func NewBlock(data string, prevBlockHash []byte) *Block {
 
 // 为了生成区块哈希，我们实现一个简单函数，来计算哈希值，没有随机数，没有难度值
 func (block *Block) setHash() {
-	var data []byte
-	data = append(data, uintToByte(block.Version)...)
-	data = append(data, block.PrevBlockHash...)
-	data = append(data, block.MerkleRoot...)
-	data = append(data, uintToByte(block.TimeStamp)...)
-	data = append(data, uintToByte(block.Difficulty)...)
-	data = append(data, uintToByte(block.Nonce)...)
-	data = append(data, block.Data...)
+	// var data []byte
+	// data = append(data, uintToByte(block.Version)...)
+	// data = append(data, block.PrevBlockHash...)
+	// data = append(data, block.MerkleRoot...)
+	// data = append(data, uintToByte(block.TimeStamp)...)
+	// data = append(data, uintToByte(block.Difficulty)...)
+	// data = append(data, uintToByte(block.Nonce)...)
+	// data = append(data, block.Data...)
+
+	tmp := [][]byte{
+		uintToByte(block.Version),
+		block.PrevBlockHash,
+		block.MerkleRoot,
+		uintToByte(block.TimeStamp),
+		uintToByte(block.Difficulty),
+		block.Data,
+		uintToByte(block.Nonce),
+	}
+
+	data := bytes.Join(tmp, []byte{})
 
 	hash := sha256.Sum256(data)
 	block.Hash = hash[:]
-}
-
-// 创建区块链，使用Block数组模拟
-type BlockChain struct {
-	Blocks []*Block
 }
